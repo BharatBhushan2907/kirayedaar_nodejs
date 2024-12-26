@@ -1,6 +1,6 @@
 const Landlord = require("../models/Landlord");
 const Tenant = require("../models/Tenant");
-const { UserRole, TenantStatus, ApprovalStatus } = require('../enums/enums');
+const { UserRole, TenantStatus } = require('../enums/enums');
 
 
 const addUserDetails = async (req, res) => {
@@ -21,11 +21,16 @@ const addUserDetails = async (req, res) => {
         if (!houseNumber || !society || !locality || !city || !pinCode || !state) {
             return res.status(400).json({ message: "Complete address details are required.",  status:false });
         }
+        let landlord = await Landlord.findOne({ phone });
+        let tenant = await Tenant.findOne({ phone });
+
+        if(landlord ||  tenant){
+            return res.status(400).json({ message: "User already exists with this phone number.",  status:false });
+            
+        }
 
         // Handle landlord details
         if (role === "LANDLORD") {
-            let landlord = await Landlord.findOne({ phone });
-            if (!landlord) {
                 landlord = new Landlord({
                     phone,
                     name,
@@ -34,18 +39,10 @@ const addUserDetails = async (req, res) => {
                 });
                 await landlord.save();
                 return res.status(201).json({ message: "Landlord details added successfully.", landlord,  status:true });
-            } else {
-                return res.status(400).json({ message: "Landlord already exists with this phone number.",  status:false });
-            }
         }
 
         // Handle tenant details
         if (role === "TENANT") {
-            let tenant = await Tenant.findOne({ phone });
-            if (tenant) {
-                return res.status(400).json({ message: "Tenant already exists with this phone number." });
-            }
-
             tenant = new Tenant({
                 phone,
                 name,
@@ -70,7 +67,3 @@ const addUserDetails = async (req, res) => {
 };
 
 module.exports = { addUserDetails };
-
-
-module.exports = { addUserDetails };
-
