@@ -20,10 +20,14 @@ app.use(bodyParser.json());
 // Import routes
 const userRoutes = require("./routes/userRoutes");
 const propertyRoutes = require("./routes/propertyRoutes");
+const authRoutes = require("./routes/authRoutes");
+
 
 // Use routes
 app.use("/api/users", userRoutes);
 app.use("/api/properties", propertyRoutes);
+app.use("/api/auth", authRoutes);
+
 
 // Start server
 const PORT = process.env.PORT || 5000;

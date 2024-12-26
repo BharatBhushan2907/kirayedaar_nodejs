@@ -1,5 +1,8 @@
 const otpGenerator = require("otp-generator");
-const User = require("../models/User");
+const Tenant = require("../models/Tenant");
+const Landlord = require("../models/Landlord")
+const OtpRequest = require('../models/otpRequestModel');  // Import the OTP request model
+
 const otpCache = new Map(); // Temporary OTP storage (use Redis in production)
 
 const generateOTP = async (req, res) => {
@@ -7,13 +10,31 @@ const generateOTP = async (req, res) => {
 
     try {
         // Generate OTP
-        const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false });
+        const otp = otpGenerator.generate(4, {
+            digits: true,       // Allow only digits
+            lowerCaseAlphabets: false,   // Disallow alphabets,
+            upperCaseAlphabets: false, // Disallow alphabets,
+            specialChars: false // Disallow special characters
+        });
         otpCache.set(phone, otp); // Store OTP temporarily
+        // Save the OTP request
+         // Check if the user already exists
+        const tenant = await Tenant.findOne({ phone });
+        const landlord = await Landlord.findOne({ phone });
 
+    // Set isExistingUser based on whether the user exists
+        const isExistingUser = tenant || landlord ? true : false;
+        const otpRequest = new OtpRequest({
+            phone,
+            otp,
+            isExistingUser
+        });
+
+        otpRequest.save();
         // Simulate sending OTP via SMS (replace this with an actual SMS service)
         console.log(`OTP for ${phone}: ${otp}`);
 
-        res.status(200).json({ message: "OTP sent successfully.", status:true });
+        res.status(200).json({ message: "OTP sent successfully.", status: true });
     } catch (error) {
         res.status(500).json({ message: "Server error.", error: error.message });
     }
@@ -42,7 +63,7 @@ const verifyOTP = async (req, res) => {
                     role: user.role,
                     isRegistered: true, // Registration is complete
                 },
-                status:true
+                status: true
             });
         } else {
             return res.status(200).json({
@@ -52,7 +73,7 @@ const verifyOTP = async (req, res) => {
                     role: null, // Role is undefined since registration isn't complete
                     isRegistered: false, // Registration is pending
                 },
-                status:true
+                status: true
             });
         }
     } catch (error) {
