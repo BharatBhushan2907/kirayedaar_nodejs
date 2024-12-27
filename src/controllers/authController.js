@@ -53,7 +53,9 @@ const verifyOTP = async (req, res) => {
         otpCache.delete(phone); // Clear OTP after use
 
         // Check if user exists
-        let user = await User.findOne({ phone });
+        let tenant = await Tenant.findOne({ phone });
+        let landlord = await Landlord.findOne({ phone });
+        let user = tenant || landlord;
 
         if (user) {
             return res.status(200).json({

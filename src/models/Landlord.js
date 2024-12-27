@@ -37,6 +37,12 @@ const landlordSchema = new mongoose.Schema(
                 },
             },
         ],
+        properties: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Property',
+            },
+          ],
         address: {
             houseNumber: { type: String, required: true },
             society: { type: String, required: true },

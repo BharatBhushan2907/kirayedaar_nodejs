@@ -1,15 +1,45 @@
+const Landlord = require("../models/Landlord");
 const Property = require("../models/Property");
 
 const addProperty = async (req, res) => {
-    const { name, address, rent, landlordId } = req.body;
-
+    const { name, address, roomDetails, areaDetails, floorDetails, phone } = req.body;
     try {
-        const newProperty = new Property({ name, address, rent, landlordId });
-        await newProperty.save();
-
-        res.status(201).json({ message: "Property added successfully." });
+        const landlord = await Landlord.findOne({ phone });
+      if (!landlord) {
+        return res.status(404).json({
+          success: false,
+          message: 'Landlord not found',
+        });
+      }
+  
+      // Create a new property
+      const newProperty = new Property({
+        landlordId: landlord._id,
+        name,
+        address,
+        roomDetails,
+        areaDetails,
+        floorDetails,
+      });
+  
+      const savedProperty = await newProperty.save();
+  
+      // Link the property to the landlord
+      landlord.properties = landlord.properties || [];
+      landlord.properties.push(savedProperty._id);
+      await landlord.save();
+  
+      res.status(201).json({
+        success: true,
+        message: 'Property added successfully',
+        property: savedProperty,
+      });
     } catch (error) {
-        res.status(500).json({ message: "Server error.", error: error.message });
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Server error',
+      });
     }
 };
 

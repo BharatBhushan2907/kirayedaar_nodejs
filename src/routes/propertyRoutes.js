@@ -4,7 +4,7 @@ const { addProperty, getPropertiesByLandlord, getAllProperties } = require("../c
 const router = express.Router();
 
 // Add a new property
-router.post("/add", addProperty);
+router.post('/add-property', addProperty);
 
 // Get properties by landlord ID
 router.get("/landlord/:id", getPropertiesByLandlord);
