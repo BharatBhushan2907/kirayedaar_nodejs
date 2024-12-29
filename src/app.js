@@ -21,12 +21,14 @@ app.use(bodyParser.json());
 const userRoutes = require("./routes/userRoutes");
 const propertyRoutes = require("./routes/propertyRoutes");
 const authRoutes = require("./routes/authRoutes");
+const landlordRoutes = require("./routes/landlordRoutes");
 
 
 // Use routes
 app.use("/api/users", userRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/landlord", landlordRoutes);
 
 
 // Start server
@@ -38,5 +40,3 @@ app.listen(PORT, () => {
 app.get("/", (req, res) => {
     res.send("Server is running!");
 });
-
-

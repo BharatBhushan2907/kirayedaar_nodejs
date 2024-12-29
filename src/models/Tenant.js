@@ -10,29 +10,48 @@ const tenantSchema = new mongoose.Schema(
         },
         name: {
             type: String,
-            required: true,
+            required: false,
         },
         email: {
             type: String,
             default: null,
             match: /^\S+@\S+\.\S+$/,
         },
-        landlord: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Landlord",
-            default: null,
-        },
+        landlords: [
+            {
+                landlord: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Landlord",
+                },
+                property: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Property",
+                },
+                isActive: {
+                    type: Boolean,
+                    default: true,
+                },
+                startDate: {
+                    type: Date,
+                    default: Date.now,
+                },
+                endDate: {
+                    type: Date,
+                    default: null, // Null means tenancy is still active
+                },
+            },
+        ],
         isApproved: {
             type: Boolean,
             default: false,
         },
         address: {
-            houseNumber: { type: String, required: true },
-            society: { type: String, required: true },
-            locality: { type: String, required: true },
-            city: { type: String, required: true },
-            pinCode: { type: String, match: /^[0-9]{6}$/, required: true },
-            state: { type: String, required: true },
+            houseNumber: { type: String, required: false },
+            society: { type: String, required: false },
+            locality: { type: String, required: false },
+            city: { type: String, required: false },
+            pinCode: { type: String, match: /^[0-9]{6}$/, required: false },
+            state: { type: String, required: false },
         },
         createdAt: {
             type: Date,
