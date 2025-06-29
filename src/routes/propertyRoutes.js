@@ -1,5 +1,5 @@
 const express = require("express");
-const { addProperty, getPropertiesByLandlord, getAllProperties, getAddPropertyForm } = require("../controllers/propertyController");
+const { addProperty, getAddPropertyForm } = require("../controllers/propertyController");
 
 const router = express.Router();
 
@@ -10,9 +10,9 @@ router.post('/add-property', addProperty);
 router.get("/form", getAddPropertyForm);
 
 // Get properties by landlord ID
-router.get("/landlord/:id", getPropertiesByLandlord);
+// router.get("/landlord/:id", getPropertiesByLandlord);
 
 // Get all properties
-router.get("/", getAllProperties);
+// router.get("/", getAllProperties);
 
 module.exports = router;
