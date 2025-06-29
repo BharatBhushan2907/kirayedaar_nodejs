@@ -30,6 +30,9 @@ const generateOTP = async (req, res) => {
             isExistingUser
         });
 
+        if(!isExistingUser){
+            // add the user temperarily in the user db 
+        }
         otpRequest.save();
         // Simulate sending OTP via SMS (replace this with an actual SMS service)
         console.log(`OTP for ${phone}: ${otp}`);
@@ -41,6 +44,50 @@ const generateOTP = async (req, res) => {
 };
 
 const verifyOTP = async (req, res) => {
+    const { phone, otp } = req.body;
+
+    try {
+        const otpEntry = await OtpRequest.findOne({ phone, otp });
+
+        if (!otpEntry) {
+            return res.status(400).json({ message: "Invalid or expired OTP.", status: false });
+        }
+
+        // OTP matched — delete it after use
+        // await OtpRequest.deleteMany({ phone });  // decide later to delete the otp or not
+
+        const tenant = await Tenant.findOne({ phone });
+        const landlord = await Landlord.findOne({ phone });
+        const user = tenant || landlord;
+
+        if (user) {
+            return res.status(200).json({
+                message: "Login successful.",
+                user: {
+                    phone: user.phone,
+                    role: user.role,
+                    isRegistered: true,
+                },
+                status: true
+            });
+        } else {
+            return res.status(200).json({
+                message: "OTP verified. Registration pending.",
+                user: {
+                    phone,
+                    role: null,
+                    isRegistered: false,
+                },
+                status: true
+            });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Server error.", error: error.message });
+    }
+};
+
+
+const verifyOTPWithRadisCache = async (req, res) => {
     const { phone, otp } = req.body;
 
     try {
