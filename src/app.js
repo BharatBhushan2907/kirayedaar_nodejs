@@ -44,6 +44,7 @@ app.use('/api/waitlist', require('./routes/waitlistRoutes'));
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+app.get('/', (req, res) => res.json({ status: 'ok', message: 'Kirayedar API is running' }));
 
 // ── 404 handler ──────────────────────────────────────────────────────────────
 app.use((req, res, next) => next(new AppError(`Route ${req.originalUrl} not found`, 404)));
