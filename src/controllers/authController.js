@@ -1,133 +1,22 @@
-const otpGenerator = require("otp-generator");
-const Tenant = require("../models/Tenant");
-const Landlord = require("../models/Landlord")
-const OtpRequest = require('../models/otpRequestModel');  // Import the OTP request model
+const asyncHandler = require('../utils/asyncHandler');
+const { success } = require('../utils/response');
+const authService = require('../services/authService');
 
-const otpCache = new Map(); // Temporary OTP storage (use Redis in production)
+const generateOTP = asyncHandler(async (req, res) => {
+  const { phone } = req.body;
+  const result = await authService.generateOTP(phone);
+  success(res, result, 'OTP sent successfully');
+});
 
-const generateOTP = async (req, res) => {
-    const { phone } = req.body;
+const verifyOTP = asyncHandler(async (req, res) => {
+  const { phone, otp } = req.body;
+  const result = await authService.verifyOTP(phone, otp);
 
-    try {
-        // Generate OTP
-        const otp = otpGenerator.generate(4, {
-            digits: true,       // Allow only digits
-            lowerCaseAlphabets: false,   // Disallow alphabets,
-            upperCaseAlphabets: false, // Disallow alphabets,
-            specialChars: false // Disallow special characters
-        });
-        otpCache.set(phone, otp); // Store OTP temporarily
-        // Save the OTP request
-         // Check if the user already exists
-        const tenant = await Tenant.findOne({ phone });
-        const landlord = await Landlord.findOne({ phone });
+  if (!result.isRegistered) {
+    return success(res, { phone: result.phone, isRegistered: false }, 'OTP verified. Please complete registration.');
+  }
 
-    // Set isExistingUser based on whether the user exists
-        const isExistingUser = tenant || landlord ? true : false;
-        const otpRequest = new OtpRequest({
-            phone,
-            otp,
-            isExistingUser
-        });
-
-        if(!isExistingUser){
-            // add the user temperarily in the user db 
-        }
-        otpRequest.save();
-        // Simulate sending OTP via SMS (replace this with an actual SMS service)
-        console.log(`OTP for ${phone}: ${otp}`);
-
-        res.status(200).json({ message: "OTP sent successfully.", status: true });
-    } catch (error) {
-        res.status(500).json({ message: "Server error.", error: error.message });
-    }
-};
-
-const verifyOTP = async (req, res) => {
-    const { phone, otp } = req.body;
-
-    try {
-        const otpEntry = await OtpRequest.findOne({ phone, otp });
-
-        if (!otpEntry) {
-            return res.status(400).json({ message: "Invalid or expired OTP.", status: false });
-        }
-
-        // OTP matched — delete it after use
-        // await OtpRequest.deleteMany({ phone });  // decide later to delete the otp or not
-
-        const tenant = await Tenant.findOne({ phone });
-        const landlord = await Landlord.findOne({ phone });
-        const user = tenant || landlord;
-
-        if (user) {
-            return res.status(200).json({
-                message: "Login successful.",
-                user: {
-                    phone: user.phone,
-                    role: user.role,
-                    isRegistered: true,
-                },
-                status: true
-            });
-        } else {
-            return res.status(200).json({
-                message: "OTP verified. Registration pending.",
-                user: {
-                    phone,
-                    role: null,
-                    isRegistered: false,
-                },
-                status: true
-            });
-        }
-    } catch (error) {
-        res.status(500).json({ message: "Server error.", error: error.message });
-    }
-};
-
-
-const verifyOTPWithRadisCache = async (req, res) => {
-    const { phone, otp } = req.body;
-
-    try {
-        const validOtp = otpCache.get(phone);
-
-        if (!validOtp || validOtp !== otp) {
-            return res.status(400).json({ message: "Invalid or expired OTP.", status: false });
-        }
-
-        otpCache.delete(phone); // Clear OTP after use
-
-        // Check if user exists
-        let tenant = await Tenant.findOne({ phone });
-        let landlord = await Landlord.findOne({ phone });
-        let user = tenant || landlord;
-
-        if (user) {
-            return res.status(200).json({
-                message: "Login successful.",
-                user: {
-                    phone: user.phone,
-                    role: user.role,
-                    isRegistered: true, // Registration is complete
-                },
-                status: true
-            });
-        } else {
-            return res.status(200).json({
-                message: "OTP verified. Registration pending.",
-                user: {
-                    phone: phone,
-                    role: null, // Role is undefined since registration isn't complete
-                    isRegistered: false, // Registration is pending
-                },
-                status: true
-            });
-        }
-    } catch (error) {
-        res.status(500).json({ message: "Server error.", error: error.message });
-    }
-};
+  success(res, result, 'Login successful');
+});
 
 module.exports = { generateOTP, verifyOTP };

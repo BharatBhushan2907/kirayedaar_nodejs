@@ -1,24 +1,43 @@
-// Define all enums as constants
 const UserRole = Object.freeze({
-    LANDLORD: "LANDLORD",
-    TENANT: "TENANT",
+  LANDLORD: 'LANDLORD',
+  TENANT: 'TENANT',
 });
 
+const TenancyStatus = Object.freeze({
+  PENDING: 'pending',
+  ACTIVE: 'active',
+  ENDED: 'ended',
+  REJECTED: 'rejected',
+});
+
+const RentStatus = Object.freeze({
+  PAID: 'paid',
+  PENDING: 'pending',
+});
+
+const EvidenceType = Object.freeze({
+  MOVE_IN: 'move-in',
+  MOVE_OUT: 'move-out',
+});
+
+// Legacy — kept for backwards compatibility
 const TenantStatus = Object.freeze({
-    ACTIVE: "ACTIVE",
-    INACTIVE: "INACTIVE",
-    PENDING_APPROVAL: "PENDING_APPROVAL",
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
 });
 
 const ApprovalStatus = Object.freeze({
-    APPROVED: "APPROVED",
-    PENDING: "PENDING",
-    REJECTED: "REJECTED",
+  APPROVED: 'APPROVED',
+  PENDING: 'PENDING',
+  REJECTED: 'REJECTED',
 });
 
-// Export enums for use across the application
 module.exports = {
-    UserRole,
-    TenantStatus,
-    ApprovalStatus,
+  UserRole,
+  TenancyStatus,
+  RentStatus,
+  EvidenceType,
+  TenantStatus,
+  ApprovalStatus,
 };

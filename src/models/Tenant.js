@@ -8,6 +8,11 @@ const tenantSchema = new mongoose.Schema(
             unique: true,
             match: /^[0-9]{10}$/,
         },
+        role: {
+            type: String,
+            default: 'TENANT',
+            immutable: true,
+        },
         name: {
             type: String,
             required: false,

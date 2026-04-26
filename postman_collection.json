@@ -1,0 +1,308 @@
+{
+  "info": {
+    "name": "Kirayedar API",
+    "_postman_id": "kirayedar-api-v1",
+    "description": "Complete API collection for Kirayedar — Rental Management Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5001/api" },
+    { "key": "token",   "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Generate OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/generate-otp",
+            "body": { "mode": "raw", "raw": "{\n  \"phone\": \"9990000001\"\n}" }
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.data && r.data.token) pm.collectionVariables.set('token', r.data.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/verify-otp",
+            "body": { "mode": "raw", "raw": "{\n  \"phone\": \"9990000001\",\n  \"otp\": \"1234\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register User (Landlord)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.data && r.data.token) pm.collectionVariables.set('token', r.data.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/users/add-details",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9990000001\",\n  \"role\": \"LANDLORD\",\n  \"name\": \"Ramesh Kumar\",\n  \"email\": \"ramesh@example.com\",\n  \"address\": {\n    \"houseNumber\": \"12\",\n    \"society\": \"Green Valley\",\n    \"locality\": \"Sector 45\",\n    \"city\": \"Gurugram\",\n    \"pinCode\": \"122003\",\n    \"state\": \"Haryana\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Register User (Tenant)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/users/add-details",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"8880000001\",\n  \"role\": \"TENANT\",\n  \"name\": \"Suresh Sharma\",\n  \"email\": \"suresh@example.com\",\n  \"address\": {\n    \"houseNumber\": \"5B\",\n    \"society\": \"Sunrise Apts\",\n    \"locality\": \"Koregaon Park\",\n    \"city\": \"Pune\",\n    \"pinCode\": \"411001\",\n    \"state\": \"Maharashtra\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/users/profile"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/users/profile",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Ramesh Kumar Updated\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Property",
+      "item": [
+        {
+          "name": "Add Property",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/property/add-property",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9990000001\",\n  \"name\": \"Green Valley 2BHK\",\n  \"address\": {\n    \"houseNumber\": \"12\",\n    \"society\": \"Green Valley\",\n    \"locality\": \"Sector 45\",\n    \"city\": \"Gurugram\"\n  },\n  \"roomDetails\": { \"bedrooms\": 2, \"bathrooms\": 2, \"parkingAvailable\": true },\n  \"areaDetails\": { \"carpetArea\": 900 },\n  \"floorDetails\": { \"totalFloors\": 5, \"propertyOnFloor\": 3 }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Properties (by Landlord)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/landlord/properties?phone=9990000001"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tenancy",
+      "item": [
+        {
+          "name": "Request Link (Landlord)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/tenancy/request-link",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantPhone\": \"8880000001\",\n  \"propertyId\": \"<property_id>\",\n  \"rentAmount\": 18000,\n  \"depositAmount\": 54000,\n  \"startDate\": \"2025-01-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Respond to Link (Tenant)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/tenancy/respond-link",
+            "body": { "mode": "raw", "raw": "{\n  \"tenancyId\": \"<tenancy_id>\",\n  \"action\": \"approve\"\n}" }
+          }
+        },
+        {
+          "name": "List Tenancies",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/tenancy/list"
+          }
+        },
+        {
+          "name": "End Tenancy",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/tenancy/end",
+            "body": { "mode": "raw", "raw": "{\n  \"tenancyId\": \"<tenancy_id>\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rent",
+      "item": [
+        {
+          "name": "Add Rent Log (Landlord)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/rent/add",
+            "body": { "mode": "raw", "raw": "{\n  \"tenancyId\": \"<tenancy_id>\",\n  \"month\": \"2025-04\",\n  \"amount\": 18000\n}" }
+          }
+        },
+        {
+          "name": "List Rent Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/rent/list?tenancyId=<tenancy_id>"
+          }
+        },
+        {
+          "name": "Mark Paid (Landlord)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/rent/mark-paid",
+            "body": { "mode": "raw", "raw": "{\n  \"rentLogId\": \"<rent_log_id>\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Evidence",
+      "item": [
+        {
+          "name": "Upload Evidence",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/evidence/upload",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "tenancyId", "value": "<tenancy_id>", "type": "text" },
+                { "key": "type",      "value": "move-in",      "type": "text" },
+                { "key": "notes",     "value": "Move-in inspection photos", "type": "text" },
+                { "key": "files",     "type": "file", "src": [] }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Evidence",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/evidence/list?tenancyId=<tenancy_id>"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Add Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/review/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"revieweeId\": \"<user_id>\",\n  \"tenancyId\": \"<tenancy_id>\",\n  \"rating\": 4,\n  \"tags\": [\"on-time\", \"cooperative\"],\n  \"comment\": \"Great tenant, always paid on time.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Reviews",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/review/list?userId=<user_id>"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Receipt",
+      "item": [
+        {
+          "name": "Generate Receipt (PDF)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type",  "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/receipt/generate",
+            "body": { "mode": "raw", "raw": "{\n  \"tenancyId\": \"<tenancy_id>\",\n  \"rentLogId\": \"<rent_log_id>\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": { "method": "GET", "url": "http://localhost:5001/health" }
+        }
+      ]
+    }
+  ]
+}
