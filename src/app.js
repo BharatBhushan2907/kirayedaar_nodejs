@@ -39,6 +39,8 @@ app.use('/api/rent',     require('./routes/rentRoutes'));
 app.use('/api/evidence', require('./routes/evidenceRoutes'));
 app.use('/api/review',   require('./routes/reviewRoutes'));
 app.use('/api/receipt',  require('./routes/receiptRoutes'));
+app.use('/api/contact',  require('./routes/contactRoutes'));
+app.use('/api/waitlist', require('./routes/waitlistRoutes'));
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));

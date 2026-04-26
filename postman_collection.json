@@ -123,6 +123,13 @@
           }
         },
         {
+          "name": "List All Properties (public)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/property?city=Mumbai&page=1&limit=20"
+          }
+        },
+        {
           "name": "Get Properties (by Landlord)",
           "request": {
             "method": "GET",
@@ -291,6 +298,40 @@
             ],
             "url": "{{baseUrl}}/receipt/generate",
             "body": { "mode": "raw", "raw": "{\n  \"tenancyId\": \"<tenancy_id>\",\n  \"rentLogId\": \"<rent_log_id>\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Waitlist",
+      "item": [
+        {
+          "name": "Join Waitlist",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/waitlist",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"phone\": \"9876543210\",\n  \"email\": \"rahul@example.com\",\n  \"role\": \"TENANT\",\n  \"city\": \"Mumbai\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "item": [
+        {
+          "name": "Submit Contact Form",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contact",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@example.com\",\n  \"subject\": \"tenant\",\n  \"message\": \"I have an issue with my rent receipt, can you help?\"\n}"
+            }
           }
         }
       ]

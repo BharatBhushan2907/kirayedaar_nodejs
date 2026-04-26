@@ -17,3 +17,27 @@
 {"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:00:24"}
 {"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:00:29"}
 {"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:00:33"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:48:36"}
+{"level":"error","message":"\"message\" length must be at least 10 characters long","method":"POST","path":"/api/contact","stack":"Error: \"message\" length must be at least 10 characters long\n    at /Users/bharatbhushan/Desktop/kirayedaar_nodejs/src/middlewares/validate.js:11:17\n    at Layer.handle [as handle_request] (/Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/route.js:149:13)\n    at Route.dispatch (/Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/route.js:119:3)\n    at Layer.handle [as handle_request] (/Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/layer.js:95:5)\n    at /Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/index.js:284:15\n    at router.process_params (/Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/index.js:346:12)\n    at next (/Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/index.js:280:10)\n    at router.handle (/Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/index.js:175:3)\n    at router (/Users/bharatbhushan/Desktop/kirayedaar_nodejs/node_modules/express/lib/router/index.js:47:12)","statusCode":422,"timestamp":"2026-04-26 08:48:39"}
+{"level":"info","message":"::1 - - [26/Apr/2026:03:18:39 +0000] \"POST /api/contact HTTP/1.1\" 422 1315 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36\"","timestamp":"2026-04-26 08:48:39"}
+{"level":"info","message":"[Contact] New inquiry from abc@hail.com — subject: landlord","timestamp":"2026-04-26 08:48:45"}
+{"level":"info","message":"::1 - - [26/Apr/2026:03:18:45 +0000] \"POST /api/contact HTTP/1.1\" 201 128 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36\"","timestamp":"2026-04-26 08:48:45"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:06"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:08"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:11"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:13"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:14"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:19"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:20"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:24"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:33"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:38"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:42"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:49:52"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:53:47"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:54:15"}
+{"level":"info","message":"Server running on port 5001 [development]","timestamp":"2026-04-26 08:54:20"}
+{"level":"info","message":"[Waitlist] New signup: 9034610452 (LANDLORD) — Gautam Buddha Nagar","timestamp":"2026-04-26 09:04:54"}
+{"level":"info","message":"::1 - - [26/Apr/2026:03:34:54 +0000] \"POST /api/waitlist HTTP/1.1\" 201 111 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36\"","timestamp":"2026-04-26 09:04:54"}
+{"level":"info","message":"[Contact] New inquiry from bhushanbharat.2907@gmail.com — subject: tenant","timestamp":"2026-04-26 09:05:24"}
+{"level":"info","message":"::1 - - [26/Apr/2026:03:35:24 +0000] \"POST /api/contact HTTP/1.1\" 201 128 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36\"","timestamp":"2026-04-26 09:05:24"}

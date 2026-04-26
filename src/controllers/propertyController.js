@@ -122,4 +122,32 @@ const getAddPropertyForm = async (req, res) => {
 };
 
 
-module.exports = { addProperty, getAddPropertyForm };
+const listProperties = async (req, res) => {
+  try {
+    const { city, page = 1, limit = 20 } = req.query;
+    const filter = {};
+    if (city) filter['address.city'] = { $regex: city, $options: 'i' };
+
+    const skip = (Number(page) - 1) * Number(limit);
+    const [properties, total] = await Promise.all([
+      Property.find(filter)
+        .select('name address roomDetails areaDetails floorDetails createdAt')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(Number(limit))
+        .lean(),
+      Property.countDocuments(filter),
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: 'Properties fetched successfully',
+      data: { properties, total, page: Number(page), limit: Number(limit) },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+module.exports = { addProperty, getAddPropertyForm, listProperties };

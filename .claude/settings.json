@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/bharatbhushan/kirayedar/**)"
+    ],
+    "additionalDirectories": [
+      "/Users/bharatbhushan/kirayedar/src/components"
+    ]
+  }
+}
